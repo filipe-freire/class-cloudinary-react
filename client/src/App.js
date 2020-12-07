@@ -1,75 +1,76 @@
-import React from "react";
-import { Switch } from "react-router-dom";
-import LoadingComponent from "./components/Loading";
-import Navbar from "./components/Navbar/Navbar";
-import HomePage from "./pages/HomePage";
-import LogIn from "./pages/LogIn";
-import ProtectedPage from "./pages/ProtectedPage";
-import Signup from "./pages/Signup";
-import NormalRoute from "./routing-components/NormalRoute";
-import ProtectedRoute from "./routing-components/ProtectedRoute";
-import { getLoggedIn, logout } from "./services/auth";
+import React from 'react';
+import { Switch } from 'react-router-dom';
+import LoadingComponent from './components/Loading';
+import Navbar from './components/Navbar/Navbar';
+import HomePage from './pages/HomePage';
+import LogIn from './pages/LogIn';
+import ProtectedPage from './pages/ProtectedPage';
+import Signup from './pages/Signup';
+import ImageUpload from './pages/ImageUpload';
+import NormalRoute from './routing-components/NormalRoute';
+import ProtectedRoute from './routing-components/ProtectedRoute';
+import { getLoggedIn, logout } from './services/auth';
 
 class App extends React.Component {
   state = {
     user: null,
-    isLoading: true,
+    isLoading: true
   };
 
   componentDidMount = () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
       return this.setState({
-        isLoading: false,
+        isLoading: false
       });
     }
-    getLoggedIn(accessToken).then((res) => {
+    getLoggedIn(accessToken).then(res => {
       if (!res.status) {
-        console.log("RES IN CASE OF FAILURE", res);
+        console.log('RES IN CASE OF FAILURE', res);
         // deal with failed backend call
         return this.setState({
-          isLoading: false,
+          isLoading: false
         });
       }
       this.setState({
         user: res.data,
-        isLoading: false,
+        isLoading: false
       });
     });
   };
 
   handleLogout = () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
       return this.setState({
         user: null,
-        isLoading: false,
+        isLoading: false
       });
     }
     this.setState(
       {
-        isLoading: true,
+        isLoading: true
       },
       () => {
-        logout(accessToken).then((res) => {
+        logout(accessToken).then(res => {
           if (!res.status) {
             // deal with error here
-            console.log("SOMETHING HAPPENED", res);
+            console.log('SOMETHING HAPPENED', res);
           }
 
-          localStorage.removeItem("accessToken");
+          localStorage.removeItem('accessToken');
           return this.setState({
             isLoading: false,
-            user: null,
+            user: null
           });
         });
       }
     );
   };
 
-  authenticate = (user) => {
+  authenticate = user => {
     this.setState({
-      user,
+      user
     });
   };
 
@@ -99,6 +100,12 @@ class App extends React.Component {
             exact
             path="/protected"
             component={ProtectedPage}
+            user={this.state.user}
+          />
+          <ProtectedRoute
+            exact
+            path="/imageUpload"
+            component={ImageUpload}
             user={this.state.user}
           />
         </Switch>

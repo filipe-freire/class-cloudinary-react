@@ -12,6 +12,9 @@ const Navbar = props => {
       <div className="nav__authLinks">
         {props.user ? (
           <>
+            <Link to="/imageUpload" className="authLink">
+              Upload Image
+            </Link>
             <Link to="/protected" className="authLink">
               Protected Page
             </Link>
