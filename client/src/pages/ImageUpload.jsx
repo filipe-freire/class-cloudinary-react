@@ -21,16 +21,20 @@ const sendFileToBackend = (file, userId) => {
 export default class ImageUpload extends Component {
   state = {
     user: this.props.user,
-    uploadedImage: null
+    uploadedImage: null,
+    imageFromBackend: null
   };
 
   handleFormSubmission = event => {
     event.preventDefault();
     const image = this.state.uploadedImage;
 
-    sendFileToBackend(image, this.state.user.session.userId._id)
+    sendFileToBackend(image, this.state.user._id)
       .then(data => {
         console.log(data);
+        this.setState({
+          imageFromBackend: data.imagePath
+        });
       })
       .catch(err => console.log(err));
   };
@@ -45,8 +49,8 @@ export default class ImageUpload extends Component {
   };
 
   render() {
-    // console.log(this.state);
     // console.log(this.state.uploadedImage);
+    // console.log(this.state.user);
     return (
       <div>
         <h1>Cloudinary Image Upload</h1>
@@ -54,10 +58,16 @@ export default class ImageUpload extends Component {
           <input type="file" name="user-image" onChange={this.handleInputChange} />
           <button type="submit">Upload Image</button>
         </form>
-        {this.state.user.session.userId.profilePic && (
+        {this.state.imageFromBackend && (
           <div>
             <h1>Current Users Profile Pic</h1>
-            <img width="300" src={this.state.user.session.userId.profilePic} alt="uploaded file" />
+            <img width="300" src={this.state.imageFromBackend} alt="Current User Profile" />
+          </div>
+        )}
+        {this.state.user.profilePic && (
+          <div>
+            <h1>Current Users Profile Pic</h1>
+            <img width="300" src={this.state.user.profilePic} alt="Current User Profile" />
           </div>
         )}
       </div>

@@ -19,6 +19,7 @@ class App extends React.Component {
 
   componentDidMount = () => {
     const accessToken = localStorage.getItem('accessToken');
+    console.log(accessToken);
     if (!accessToken) {
       return this.setState({
         isLoading: false
@@ -32,8 +33,9 @@ class App extends React.Component {
           isLoading: false
         });
       }
+      console.log('working', res);
       this.setState({
-        user: res.data,
+        user: res.data.user,
         isLoading: false
       });
     });

@@ -51,12 +51,13 @@ router.get('/session', (req, res) => {
   const accessToken = req.headers.authorization;
 
   Session.findById(accessToken)
-    .populate('userId')
+    .populate({ path: 'user', model: 'User' })
     .then(session => {
       if (!session) {
         return res.status(404).json({ errorMessage: 'Session does not exist' });
       }
-      return res.status(200).json({ session });
+      console.log('working', session);
+      return res.status(200).json(session);
     });
 });
 

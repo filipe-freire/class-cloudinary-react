@@ -1,36 +1,36 @@
-import React, { Component } from "react";
-import { signup } from "../services/auth";
-import "./auth.css";
+import React, { Component } from 'react';
+import { signup } from '../services/auth';
+import './auth.css';
 
 export default class Signup extends Component {
   state = {
-    username: "",
-    password: "",
-    error: null,
+    username: '',
+    password: '',
+    error: null
   };
 
-  handleInputChange = (event) => {
+  handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
-      [name]: value,
+      [name]: value
     });
   };
 
-  handleFormSubmission = (event) => {
+  handleFormSubmission = event => {
     event.preventDefault();
     const credentials = {
       username: this.state.username,
-      password: this.state.password,
+      password: this.state.password
     };
-    signup(credentials).then((res) => {
+    signup(credentials).then(res => {
       // successful signup
-      console.log(res);
+      //console.log(res);
       if (!res.status) {
         // unsuccessful signup
       }
-      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem('accessToken', res.data.accessToken);
       this.props.authenticate(res.data.user);
-      this.props.history.push("/");
+      this.props.history.push('/');
     });
   };
 
