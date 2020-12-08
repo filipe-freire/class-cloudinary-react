@@ -106,7 +106,7 @@ router.post('/signup', shouldNotBeLoggedIn, (req, res) => {
       })
       .then(user => {
         Session.create({
-          userId: user._id,
+          user: user._id,
           createdAt: Date.now()
         }).then(session => {
           res.status(201).json({ user, accessToken: session._id });
@@ -154,7 +154,7 @@ router.post('/login', shouldNotBeLoggedIn, (req, res, next) => {
         if (!isSamePassword) {
           return res.status(400).json({ errorMessage: 'Wrong credentials.' });
         }
-        Session.create({ userId: user._id, createdAt: Date.now() }).then(session => {
+        Session.create({ user: user._id, createdAt: Date.now() }).then(session => {
           return res.json({ user, accessToken: session._id });
         });
       });
